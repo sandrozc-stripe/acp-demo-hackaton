@@ -165,8 +165,6 @@ python -m http.server 8000
 
 ### Demo Implementation
 - In-memory storage (data lost on restart)
-- Simulated payment processing
 - No authentication/authorization
-- Not production-ready
 
 
