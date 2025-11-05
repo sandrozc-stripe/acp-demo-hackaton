@@ -40,12 +40,6 @@ npm run test:coverage
 - `POST /checkouts/:id/complete` - Complete checkout
 - `POST /checkouts/:id/cancel` - Cancel checkout
 
-## Sample Products
-
-- `item_123` - Premium Widget ($10.00)
-- `item_456` - Basic Gadget ($5.00)
-- `item_789` - Deluxe Tool ($15.00)
-
 ## Project Structure
 
 ```
