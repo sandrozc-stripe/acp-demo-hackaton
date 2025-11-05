@@ -35,7 +35,6 @@ Complete implementation of the Agentic Commerce Protocol with seller backend and
 
 ```
 ACP/
-├── specification.md              # ACP specification document
 ├── README.md                    # This file
 │
 ├── seller_backend/               # Node.js seller backend
