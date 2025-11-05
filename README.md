@@ -34,7 +34,7 @@ Complete implementation of the Agentic Commerce Protocol with seller backend and
 ## Project Structure
 
 ```
-ACP/
+your_folder/
 ├── README.md                    # This file
 │
 ├── seller_backend/               # Node.js seller backend
@@ -60,33 +60,6 @@ ACP/
     ├── app.js                      # Application logic
     └── README.md                  # Frontend docs
 ```
-
-## Features
-
-### Seller Backend (Node.js)
-- ✅ Full ACP implementation
-- ✅ All checkout operations (Create, Retrieve, Update, Complete, Cancel)
-- ✅ Product catalog management
-- ✅ Multiple shipping options
-- ✅ Comprehensive test suite (57 tests, 85%+ coverage)
-- ✅ In-memory data storage (demo)
-
-### Chat Backend (Python)
-- ✅ Simple Flask API
-- ✅ ACP-compliant client
-- ✅ All checkout operations supported
-- ✅ Convenience endpoints (quick checkout)
-- ✅ CORS enabled for browser access
-- ✅ Clean and documented
-
-### Chat Frontend (HTML/JS)
-- ✅ Beautiful, modern chat interface
-- ✅ Interactive shopping experience
-- ✅ Product browsing in chat
-- ✅ Shopping cart management
-- ✅ Complete checkout flow in chat
-- ✅ No framework dependencies (vanilla JS)
-- ✅ Mobile-responsive design
 
 ## Quick Start
 
