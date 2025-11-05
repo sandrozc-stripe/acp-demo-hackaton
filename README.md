@@ -38,7 +38,6 @@ python -m http.server 8000
 
 ### Seller Backend (Port 3000)
 - `GET /health` - Health check
-- `GET /products` - List products
 - `POST /checkouts` - Create checkout
 - `GET /checkouts/:id` - Retrieve checkout
 - `PUT /checkouts/:id` - Update checkout

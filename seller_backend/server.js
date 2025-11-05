@@ -483,15 +483,6 @@ app.post('/checkouts/:id/cancel', (req, res) => {
   }
 });
 
-/**
- * GET /products
- * List available products (bonus endpoint for convenience)
- */
-app.get('/products', (req, res) => {
-  res.json({
-    products: Object.values(PRODUCT_CATALOG)
-  });
-});
 
 /**
  * Health check endpoint
