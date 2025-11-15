@@ -216,6 +216,21 @@ app.get('/checkouts/:id', (req, res) => {
   }
 });
 
+app.get('/products', (_, res) => {
+  try {
+    // Convert PRODUCT_CATALOG object to array format expected by frontend
+    const productsArray = Object.values(PRODUCT_CATALOG);
+    res.json({ products: productsArray });
+  } catch (error) {
+    console.error('Error retrieving product catalog:', error);
+    res.status(500).json({
+      type: 'processing_error',
+      code: 'internal_error',
+      message: 'An error occurred while retrieving the product catalog'
+    });
+  }
+});
+
 /**
  * PUT /checkouts/:id
  * Update a Checkout Session
@@ -487,7 +502,7 @@ app.post('/checkouts/:id/cancel', (req, res) => {
 /**
  * Health check endpoint
  */
-app.get('/health', (req, res) => {
+app.get('/health', (_, res) => {
   res.json({ status: 'ok', message: 'ACP Seller Backend is running' });
 });
 
