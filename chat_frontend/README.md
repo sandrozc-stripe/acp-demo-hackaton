@@ -2,14 +2,6 @@
 
 Interactive chat interface for shopping using the Agentic Commerce Protocol.
 
-## Features
-
-- Modern chat interface
-- Product browsing
-- Shopping cart
-- Complete checkout flow
-- Mobile-friendly
-
 ## Quick Start
 
 ### Prerequisites
@@ -48,9 +40,3 @@ Change API URL in `app.js`:
 ```javascript
 const API_BASE_URL = 'http://localhost:5000';
 ```
-
-## Notes
-
-- Pure vanilla JavaScript (no dependencies)
-- Demo interface (not production-ready)
-- Requires backend services running
