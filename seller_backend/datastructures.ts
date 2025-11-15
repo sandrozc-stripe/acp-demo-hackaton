@@ -3,50 +3,73 @@
  * This file contains all the data structure definitions and helper functions
  */
 
+import { components } from './types/openapi';
+
+// Type aliases from OpenAPI spec
+export type Address = components['schemas']['Address'];
+export type Buyer = components['schemas']['Buyer'];
+export type LineItem = components['schemas']['LineItem'];
+export type Item = components['schemas']['Item'];
+export type FulfillmentOptionShipping = components['schemas']['FulfillmentOptionShipping'];
+export type Total = components['schemas']['Total'];
+export type PaymentProvider = components['schemas']['PaymentProvider'];
+
 // Checkout Status
-const CheckoutStatus = {
-  NOT_READY_FOR_PAYMENT: 'not_ready_for_payment',
-  READY_FOR_PAYMENT: 'ready_for_payment',
-  COMPLETED: 'completed',
-  CANCELED: 'canceled',
-  IN_PROGRESS: 'in_progress'
-};
+export enum CheckoutStatus {
+  NOT_READY_FOR_PAYMENT = 'not_ready_for_payment',
+  READY_FOR_PAYMENT = 'ready_for_payment',
+  COMPLETED = 'completed',
+  CANCELED = 'canceled',
+  IN_PROGRESS = 'in_progress'
+}
 
 // Message Types
-const MessageType = {
-  INFO: 'info',
-  ERROR: 'error'
-};
+export enum MessageType {
+  INFO = 'info',
+  ERROR = 'error'
+}
 
 // Total Types
-const TotalType = {
-  ITEMS_BASE_AMOUNT: 'items_base_amount',
-  ITEMS_DISCOUNT: 'items_discount',
-  SUBTOTAL: 'subtotal',
-  DISCOUNT: 'discount',
-  FULFILLMENT: 'fulfillment',
-  TAX: 'tax',
-  FEE: 'fee',
-  TOTAL: 'total'
-};
+export enum TotalType {
+  ITEMS_BASE_AMOUNT = 'items_base_amount',
+  ITEMS_DISCOUNT = 'items_discount',
+  SUBTOTAL = 'subtotal',
+  DISCOUNT = 'discount',
+  FULFILLMENT = 'fulfillment',
+  TAX = 'tax',
+  FEE = 'fee',
+  TOTAL = 'total'
+}
 
 // Fulfillment Types
-const FulfillmentType = {
-  SHIPPING: 'shipping',
-  DIGITAL: 'digital'
-};
+export enum FulfillmentType {
+  SHIPPING = 'shipping',
+  DIGITAL = 'digital'
+}
 
 // Link Types
-const LinkType = {
-  TERMS_OF_USE: 'terms_of_use',
-  PRIVACY_POLICY: 'privacy_policy',
-  SELLER_SHOP_POLICIES: 'seller_shop_policies'
-};
+export enum LinkType {
+  TERMS_OF_USE = 'terms_of_use',
+  PRIVACY_POLICY = 'privacy_policy',
+  SELLER_SHOP_POLICIES = 'seller_shop_policies'
+}
+
+/**
+ * Product interface for the catalog
+ */
+export interface Product {
+  id: string;
+  name: string;
+  price: number; // price per unit in cents
+  description: string;
+  stock: number;
+  image: string;
+}
 
 /**
  * Sample product catalog (for demo purposes)
  */
-const PRODUCT_CATALOG = {
+export const PRODUCT_CATALOG: Record<string, Product> = {
   'item_123': {
     id: 'item_123',
     name: 'The Origins of Efficiency - Brian Potter',
@@ -76,23 +99,23 @@ const PRODUCT_CATALOG = {
 /**
  * Create a Buyer object
  */
-function createBuyer(data = {}) {
+export function createBuyer(data: Partial<Buyer> = {}): Buyer {
   return {
     first_name: data.first_name || '',
     last_name: data.last_name || '',
     email: data.email || '',
-    phone_number: data.phone_number || null
+    phone_number: data.phone_number
   };
 }
 
 /**
  * Create an Address object
  */
-function createAddress(data = {}) {
+export function createAddress(data: Partial<Address> = {}): Address {
   return {
     name: data.name || '',
     line_one: data.line_one || '',
-    line_two: data.line_two || null,
+    line_two: data.line_two,
     city: data.city || '',
     state: data.state || '',
     country: data.country || '',
@@ -103,7 +126,7 @@ function createAddress(data = {}) {
 /**
  * Create a LineItem from an item request
  */
-function createLineItem(item, product) {
+export function createLineItem(item: Item, product: Product): LineItem {
   const baseAmount = product.price * item.quantity;
   const discount = 0; // No discounts for demo
   const subtotal = baseAmount - discount;
@@ -127,7 +150,7 @@ function createLineItem(item, product) {
 /**
  * Get available fulfillment options
  */
-function getFulfillmentOptions() {
+export function getFulfillmentOptions(): FulfillmentOptionShipping[] {
   return [
     {
       type: FulfillmentType.SHIPPING,
@@ -135,9 +158,9 @@ function getFulfillmentOptions() {
       title: 'Standard Shipping',
       subtitle: '5-7 business days',
       carrier: 'USPS',
-      subtotal: 300, // $3.00
-      tax: 0,
-      total: 300
+      subtotal: '300', // $3.00
+      tax: '0',
+      total: '300'
     },
     {
       type: FulfillmentType.SHIPPING,
@@ -145,9 +168,9 @@ function getFulfillmentOptions() {
       title: 'Express Shipping',
       subtitle: '2-3 business days',
       carrier: 'FedEx',
-      subtotal: 500, // $5.00
-      tax: 0,
-      total: 500
+      subtotal: '500', // $5.00
+      tax: '0',
+      total: '500'
     },
     {
       type: FulfillmentType.SHIPPING,
@@ -155,9 +178,9 @@ function getFulfillmentOptions() {
       title: 'Overnight Shipping',
       subtitle: 'Next business day',
       carrier: 'FedEx',
-      subtotal: 800, // $8.00
-      tax: 0,
-      total: 800
+      subtotal: '800', // $8.00
+      tax: '0',
+      total: '800'
     }
   ];
 }
@@ -165,12 +188,11 @@ function getFulfillmentOptions() {
 /**
  * Calculate totals for a checkout
  */
-function calculateTotals(lineItems, fulfillmentOption) {
+export function calculateTotals(lineItems: LineItem[], fulfillmentOption: FulfillmentOptionShipping | null): Total[] {
   const itemsSubtotal = lineItems.reduce((sum, item) => sum + item.subtotal, 0);
-  const itemsDiscount = lineItems.reduce((sum, item) => sum + item.discount, 0);
   const itemsTax = lineItems.reduce((sum, item) => sum + item.tax, 0);
-  
-  const fulfillmentAmount = fulfillmentOption ? fulfillmentOption.total : 0;
+
+  const fulfillmentAmount = fulfillmentOption ? parseInt(fulfillmentOption.total) : 0;
   const totalAmount = itemsSubtotal + fulfillmentAmount + itemsTax;
 
   return [
@@ -200,7 +222,7 @@ function calculateTotals(lineItems, fulfillmentOption) {
 /**
  * Create a payment provider object
  */
-function createPaymentProvider() {
+export function createPaymentProvider(): PaymentProvider {
   return {
     provider: 'stripe',
     supported_payment_methods: ['card']
@@ -210,23 +232,6 @@ function createPaymentProvider() {
 /**
  * Generate a unique ID
  */
-function generateId(prefix = 'checkout') {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+export function generateId(prefix: string = 'checkout'): string {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 }
-
-module.exports = {
-  CheckoutStatus,
-  MessageType,
-  TotalType,
-  FulfillmentType,
-  LinkType,
-  PRODUCT_CATALOG,
-  createBuyer,
-  createAddress,
-  createLineItem,
-  getFulfillmentOptions,
-  calculateTotals,
-  createPaymentProvider,
-  generateId
-};
-

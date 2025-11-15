@@ -1,58 +1,51 @@
 # ACP Seller Backend
 
-Demo implementation of the Stripe Agentic Commerce Protocol (ACP) seller backend.
-
-## Features
-
-- Create, retrieve, update, complete, and cancel checkout sessions
-- Product catalog endpoint
-- Full test coverage
+OpenAPI-driven TypeScript implementation of the Agentic Commerce Protocol (ACP) seller backend.
 
 ## Quick Start
 
-### Install & Run
+### Install Dependencies
 ```bash
-cd seller_backend
 npm install
-npm start
 ```
 
-Server starts on `http://localhost:3000`
-
-### Development Mode
+### Development Mode (with hot reload)
 ```bash
 npm run dev
 ```
 
-### Run Tests
-```bash
-npm test
-npm run test:coverage
-```
+Server runs on `http://localhost:3000`
 
 ## API Endpoints
 
+### ACP Protocol (OpenAPI validated)
+- `POST /checkout_sessions` - Create checkout
+- `GET /checkout_sessions/:id` - Retrieve checkout
+- `POST /checkout_sessions/:id` - Update checkout
+- `POST /checkout_sessions/:id/complete` - Complete checkout
+- `POST /checkout_sessions/:id/cancel` - Cancel checkout
+
+### Internal (not in ACP spec)
 - `GET /health` - Health check
 - `GET /products` - List products
-- `POST /checkouts` - Create checkout
-- `GET /checkouts/:id` - Retrieve checkout
-- `PUT /checkouts/:id` - Update checkout
-- `POST /checkouts/:id/complete` - Complete checkout
-- `POST /checkouts/:id/cancel` - Cancel checkout
 
 ## Project Structure
 
 ```
 seller_backend/
-├── server.js           # Main server
-├── datastructures.js   # Data structures & helpers
-├── package.json        # Dependencies
-└── test/              # Test suite
+├── openapi.agentic_checkout.yaml  # API specification (source of truth)
+├── server.ts                      # Express server with OpenAPI validation
+├── datastructures.ts              # Business logic & helpers
+├── types/
+│   └── openapi.d.ts              # Auto-generated from OpenAPI spec
+├── dist/                         # Compiled JavaScript (after build)
+├── tsconfig.json                 # TypeScript configuration
+└── package.json                  # Dependencies & scripts
 ```
 
-## Notes
+## Environment Variables
 
-- Demo implementation with in-memory storage
-- Data lost on server restart
-- Payment processing is simulated
-- Not production-ready
+Create a `.env` file:
+```
+SELLER_API_KEY=your_stripe_secret_key
+```

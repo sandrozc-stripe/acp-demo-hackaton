@@ -17,17 +17,24 @@ class ACPClient:
     def _make_request(self, method: str, endpoint: str, data: Optional[Dict] = None) -> Dict[str, Any]:
         """Make HTTP request to seller backend"""
         url = f"{self.base_url}{endpoint}"
-        
+
+        # Add required ACP headers
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer facilitator_token',  # Required by OpenAPI spec
+            'API-Version': '2025-09-29'  # Required by OpenAPI spec
+        }
+
         try:
             if method == 'GET':
-                response = requests.get(url)
+                response = requests.get(url, headers=headers)
             elif method == 'POST':
-                response = requests.post(url, json=data)
+                response = requests.post(url, json=data, headers=headers)
             elif method == 'PUT':
-                response = requests.put(url, json=data)
+                response = requests.put(url, json=data, headers=headers)
             else:
                 raise ValueError(f"Unsupported method: {method}")
-            
+
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -59,11 +66,11 @@ class ACPClient:
         if fulfillment_address:
             data['fulfillment_address'] = fulfillment_address
             
-        return self._make_request('POST', '/checkouts', data)
-    
+        return self._make_request('POST', '/checkout_sessions', data)
+
     def get_checkout(self, checkout_id: str) -> Dict[str, Any]:
         """Retrieve an existing checkout session"""
-        return self._make_request('GET', f'/checkouts/{checkout_id}')
+        return self._make_request('GET', f'/checkout_sessions/{checkout_id}')
     
     def update_checkout(
         self,
@@ -92,8 +99,8 @@ class ACPClient:
             data['fulfillment_address'] = fulfillment_address
         if fulfillment_option_id:
             data['fulfillment_option_id'] = fulfillment_option_id
-            
-        return self._make_request('PUT', f'/checkouts/{checkout_id}', data)
+
+        return self._make_request('POST', f'/checkout_sessions/{checkout_id}', data)
     
     def complete_checkout(
         self,
@@ -116,9 +123,13 @@ class ACPClient:
             'provider': payment_provider
         }
 
-        #get the amount from the checkout
+        # Get the total amount from the checkout (including items + shipping + tax)
         checkout_response = self.get_checkout(checkout_id)
-        amount = checkout_response['totals'][0]['amount']
+        # Find the 'total' entry in the totals array (not subtotal)
+        total_entry = next((t for t in checkout_response['totals'] if t['type'] == 'total'), None)
+        if not total_entry:
+            return {'error': 'Total amount not found in checkout response'}
+        amount = total_entry['amount']
 
         tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
         expires_at_timestamp = int(tomorrow.timestamp()) 
@@ -141,11 +152,11 @@ class ACPClient:
 
 
         payment_data['token'] = spt_token_id
-            
+
         data = {'payment_data': payment_data}
-        return self._make_request('POST', f'/checkouts/{checkout_id}/complete', data)
-    
+        return self._make_request('POST', f'/checkout_sessions/{checkout_id}/complete', data)
+
     def cancel_checkout(self, checkout_id: str) -> Dict[str, Any]:
         """Cancel an existing checkout session"""
-        return self._make_request('POST', f'/checkouts/{checkout_id}/cancel', {})
+        return self._make_request('POST', f'/checkout_sessions/{checkout_id}/cancel', {})
 
