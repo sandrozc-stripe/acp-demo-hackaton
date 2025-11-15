@@ -28,7 +28,6 @@ python server.py
 ```
 
 ### 3. Chat Frontend
-Open `chat_frontend/index.html` in your browser, or:
 ```bash
 cd chat_frontend
 python -m http.server 8000
@@ -37,7 +36,7 @@ python -m http.server 8000
 ## API Endpoints
 
 ### Seller Backend (Port 3000)
-- `GET /health` - Health check
+- `GET /products` - List products
 - `POST /checkouts` - Create checkout
 - `GET /checkouts/:id` - Retrieve checkout
 - `PUT /checkouts/:id` - Update checkout
@@ -45,14 +44,12 @@ python -m http.server 8000
 - `POST /checkouts/:id/cancel` - Cancel checkout
 
 ### Chat Backend (Port 5000)
-- `GET /health` - Health check
 - `GET /products` - List products
 - `POST /checkout/create` - Create checkout
 - `GET /checkout/:id` - Retrieve checkout
 - `PUT /checkout/:id/update` - Update checkout
 - `POST /checkout/:id/complete` - Complete checkout
 - `POST /checkout/:id/cancel` - Cancel checkout
-- `POST /quick-checkout` - Quick checkout (create + complete)
 
 ## Documentation
 

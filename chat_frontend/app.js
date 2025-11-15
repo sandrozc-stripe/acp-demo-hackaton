@@ -51,7 +51,7 @@ userInput.addEventListener('keypress', (e) => {
 window.addEventListener('load', () => {
     addBotMessage("👋 Welcome to the Shopping Assistant! I'm here to help you shop.");
     setTimeout(() => {
-        addBotMessage("You can:\n• Type 'show products' to browse\n• Type 'help' for more commands\n• Or just tell me what you're looking for!");
+        addBotMessage("Type 'show products' to browse available products !\n");
     }, 500);
 });
 

@@ -2,13 +2,6 @@
 
 Python Flask server that bridges chat/AI agents and the seller backend using the Agentic Commerce Protocol.
 
-## Features
-
-- Flask API server
-- ACP-compliant client
-- All checkout operations
-- Convenience endpoints
-
 ## Quick Start
 
 ### Install & Run
@@ -26,14 +19,12 @@ Server starts on `http://localhost:5000`
 
 ## API Endpoints
 
-- `GET /health` - Health check
 - `GET /products` - List products
 - `POST /checkout/create` - Create checkout
 - `GET /checkout/:id` - Get checkout
 - `PUT /checkout/:id/update` - Update checkout
 - `POST /checkout/:id/complete` - Complete checkout
-- `POST /checkout/:id/cancel` - Cancel checkout
-- `POST /quick-checkout` - Quick checkout (create + complete)
+- `POST /checkout/:id/cancel` - Cancel checkoute
 
 ## Configuration
 
@@ -51,9 +42,3 @@ chat_backend/
 ├── config.py           # Configuration
 └── requirements.txt    # Dependencies
 ```
-
-## Notes
-
-- Demo implementation
-- No authentication/authorization
-- Not production-ready

@@ -14,7 +14,6 @@ import {
   CheckoutStatus,
   MessageType,
   PRODUCT_CATALOG,
-  Product,
   createBuyer,
   createAddress,
   createLineItem,
@@ -30,9 +29,6 @@ const PORT = 3000;
 // Type aliases from OpenAPI spec
 type CheckoutSession = components['schemas']['CheckoutSession'];
 type Item = components['schemas']['Item'];
-type Buyer = components['schemas']['Buyer'];
-type Address = components['schemas']['Address'];
-type PaymentData = components['schemas']['PaymentData'];
 type ErrorResponse = components['schemas']['Error'];
 
 // Middleware
@@ -50,7 +46,7 @@ app.use(
     validateRequests: true,
     validateResponses: false, // Set to true in development for strict validation
     validateSecurity: false, // We'll handle auth separately for demo purposes
-    ignorePaths: /\/products|\/health/, // Allow internal endpoints not in ACP spec
+    ignorePaths: /\/products|\//, // Allow internal endpoints not in ACP spec
   })
 );
 
@@ -439,27 +435,6 @@ app.get('/products', (_req: Request, res: Response) => {
   }
 });
 
-/**
- * Health check endpoint
- */
-app.get('/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', message: 'ACP Seller Backend is running' });
-});
-
-// Error handler for OpenAPI validation errors
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  if (err.status) {
-    res.status(err.status).json({
-      type: 'invalid_request',
-      code: 'validation_error',
-      message: err.message,
-      errors: err.errors,
-    });
-  } else {
-    next(err);
-  }
-});
-
 // Start server (only if not being imported for testing)
 if (require.main === module) {
   app.listen(PORT, () => {
@@ -467,7 +442,6 @@ if (require.main === module) {
     console.log(`📍 Port: ${PORT}`);
     console.log(`🔗 Base URL: http://localhost:${PORT}`);
     console.log(`\nAvailable endpoints:`);
-    console.log(`  GET    /health                                  - Health check`);
     console.log(`  GET    /products                                - List products (internal)`);
     console.log(`  POST   /checkout_sessions                       - Create checkout`);
     console.log(`  GET    /checkout_sessions/:id                   - Get checkout`);
