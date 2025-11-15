@@ -23,7 +23,6 @@ cd chat_backend && source venv/bin/activate && python server.py
 ```
 
 ### Open Interface
-Open `index.html` in your browser, or:
 ```bash
 cd chat_frontend
 python -m http.server 8000
@@ -32,11 +31,7 @@ python -m http.server 8000
 
 ## Chat Commands
 
-- `show products` / `browse` - View products
-- `buy item_123` - Add to cart
-- `cart` - View cart
-- `help` - Show commands
-- `cancel` - Cancel checkout
+- `show products`
 
 ## File Structure
 
